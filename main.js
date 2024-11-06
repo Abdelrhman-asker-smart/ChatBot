@@ -44,7 +44,7 @@ const generateResponse = (incomingChatLi, lastMessage) => {
           "عفوا لدينا مشكله في النظام ..و نحن نقوم الان ببعض اعمال التحديث";
 
       result.forEach((response, index) => {
-        const newChatLi = createChatLi(response.text, "ResponseelementStyle");
+        const newChatLi = createChatLi(response.text, "chat-incoming");
         chatbox.appendChild(newChatLi);
       });
     })
