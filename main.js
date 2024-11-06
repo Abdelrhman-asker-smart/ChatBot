@@ -16,9 +16,10 @@ const createChatLi = (message, className) => {
   return chatLi;
 };
 
-const generateResponse = (incomingChatLi) => {
+const generateResponse = (incomingChatLi, lastMessage) => {
   const API_URL = "https://open-ai21.p.rapidapi.com/claude3";
   const messageElement = incomingChatLi.querySelector("p");
+  const messageElementTwo = lastMessage.querySelector("p");
 
   const requestOptions = {
     method: "POST",
@@ -46,7 +47,14 @@ const generateResponse = (incomingChatLi) => {
     })
     .then((data) => {
       console.log("hello", data);
-      messageElement.textContent = data.result; //your response
+
+      if (data.result.length < 1) {
+        messageElement.textContent =
+          "I apologize, but I do not have any information to provide a response to your message"; // if its no answer for user`s response
+      } else {
+        messageElement.textContent = data.result; //your response
+        messageElementTwo.textContent = "Want to ask more questions?"; //your Second response
+      }
     })
     .catch((error) => {
       messageElement.classList.add("error");
@@ -65,11 +73,13 @@ const handleChat = () => {
   chatbox.scrollTo(0, chatbox.scrollHeight);
 
   const incomingChatLi = createChatLi("Thinking...", "chat-incoming");
+  const lastMessage = createChatLi("", "chat-incoming");
   chatbox.appendChild(incomingChatLi);
+  chatbox.appendChild(lastMessage);
   chatbox.scrollTo(0, chatbox.scrollHeight);
   document.getElementById("TextArea").value = ""; // reset you input
   setTimeout(() => {
-    generateResponse(incomingChatLi);
+    generateResponse(incomingChatLi, lastMessage);
   }, 600);
 };
 
@@ -94,7 +104,7 @@ function toggleChat() {
 }
 document.addEventListener("keydown", function (event) {
   if (event.key === "Enter") {
-    // Check if Enter key is pressed
-    handleChat(); // Call the function
+    event.preventDefault(); // Prevent the default Enter key behavior
+    handleChat();
   }
 });
