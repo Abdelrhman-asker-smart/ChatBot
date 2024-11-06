@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChatBot</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div id="OpenChat" onclick="toggleChat()">
+      <img
+        src="./assets/images/chat.png"
+        class="OpenChatImg"
+        alt="openChat"
+        width="100px"
+        height="100px"
+      />
+    </div>
+    <div class="chatBot" id="chatBot">
+      <header>
+        <h2>ChatBot</h2>
+        <span alt="Close" id="cross" onclick="toggleChat()">X</span>
+      </header>
+      <ul class="chatbox">
+        <li class="chat-incoming chat">
+          <p>Hey! How can I assist you today?</p>
+        </li>
+      </ul>
+      <div class="chat-input">
+        <textarea
+          id="TextArea"
+          rows="0"
+          cols="17"
+          placeholder="Enter a message..."
+        ></textarea>
+        <button id="sendBTN">Send</button>
+      </div>
+    </div>
+    <script src="main.js" defer></script>
+  </body>
+</html>
