@@ -3,7 +3,7 @@ const sendChatBtn = document.querySelector(".chat-input button");
 const chatbox = document.querySelector(".chatbox");
 
 let userMessage;
-const API_KEY = "fe3469bdc5mshc1376ef3df17411p1623cajsn6da2a938a410";
+// const API_KEY = "fe3469bdc5mshc1376ef3df17411p1623cajsn6da2a938a410";
 
 //OpenAI Free APIKey
 
@@ -17,51 +17,36 @@ const createChatLi = (message, className) => {
 };
 
 const generateResponse = (incomingChatLi, lastMessage) => {
-  const API_URL = "https://open-ai21.p.rapidapi.com/claude3";
   const messageElement = incomingChatLi.querySelector("p");
   const messageElementTwo = lastMessage.querySelector("p");
 
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  const raw = JSON.stringify({
+    sender: "user_1",
+    message: userMessage,
+  });
+
   const requestOptions = {
     method: "POST",
-    headers: {
-      "x-rapidapi-key": "fe3469bdc5mshc1376ef3df17411p1623cajsn6da2a938a410",
-      "x-rapidapi-host": "open-ai21.p.rapidapi.com",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      //   model: "gpt-3.5-turbo",
-      messages: [
-        {
-          role: "user",
-          content: userMessage,
-        },
-      ],
-    }),
+    headers: myHeaders,
+    body: raw,
+    redirect: "follow",
   };
-  fetch(API_URL, requestOptions)
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return res.json();
-    })
-    .then((data) => {
-      console.log("hello", data);
 
-      if (data.result.length < 1) {
+  fetch("http://localhost:5005/webhooks/rest/webhook", requestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+      console.log(result);
+      if (result.length < 1)
         messageElement.textContent =
-          "I apologize, but I do not have any information to provide a response to your message"; // if its no answer for user`s response
-      } else {
-        messageElement.textContent = data.result; //your response
-        messageElementTwo.textContent = "Want to ask more questions?"; //your Second response
-      }
+          "عفوا لدينا مشكله في النظام ..و نحن نقوم الان ببعض اعمال التحديث";
+
+      messageElement.textContent = result[0].text;
+      messageElementTwo.textContent = result[1].text;
     })
-    .catch((error) => {
-      messageElement.classList.add("error");
-      messageElement.textContent =
-        "Oops! Something went wrong. Please try again!";
-    })
-    .finally(() => chatbox.scrollTo(0, chatbox.scrollHeight));
+    .catch((error) => console.error(error));
 };
 
 const handleChat = () => {
