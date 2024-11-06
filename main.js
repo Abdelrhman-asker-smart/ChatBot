@@ -18,7 +18,6 @@ const createChatLi = (message, className) => {
 
 const generateResponse = (incomingChatLi, lastMessage) => {
   const messageElement = incomingChatLi.querySelector("p");
-  const messageElementTwo = lastMessage.querySelector("p");
 
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
@@ -43,6 +42,8 @@ const generateResponse = (incomingChatLi, lastMessage) => {
         messageElement.textContent =
           "عفوا لدينا مشكله في النظام ..و نحن نقوم الان ببعض اعمال التحديث";
 
+      incomingChatLi.remove();
+
       result.forEach((response, index) => {
         const newChatLi = createChatLi(response.text, "chat-incoming");
         chatbox.appendChild(newChatLi);
@@ -53,20 +54,19 @@ const generateResponse = (incomingChatLi, lastMessage) => {
 
 const handleChat = () => {
   userMessage = chatInput.value.trim();
+
   if (!userMessage) {
     return;
   }
   chatbox.appendChild(createChatLi(userMessage, "chat-outgoing"));
   chatbox.scrollTo(0, chatbox.scrollHeight);
 
-  const incomingChatLi = createChatLi("Thinking...", "chat-incoming");
-  const lastMessage = createChatLi("", "chat-incoming");
+  const incomingChatLi = createChatLi("Wait for response...", "chat-incoming");
   chatbox.appendChild(incomingChatLi);
-  chatbox.appendChild(lastMessage);
   chatbox.scrollTo(0, chatbox.scrollHeight);
   document.getElementById("TextArea").value = ""; // reset you input
   setTimeout(() => {
-    generateResponse(incomingChatLi, lastMessage);
+    generateResponse(incomingChatLi);
   }, 600);
 };
 

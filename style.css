@@ -89,7 +89,7 @@ header h2 {
 }
 
 .chat-input textarea {
-  width: 522px;
+  width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 7px;
@@ -101,7 +101,6 @@ header h2 {
   color: green;
   font-weight: 600;
   margin-top: -10px;
-  margin-left: -15px;
   height: 71px;
 }
 
